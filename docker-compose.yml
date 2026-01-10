@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: banking-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      # This creates the default DB, but our script creates the others
+      POSTGRES_DB: defaultdb 
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      # Mount the init script here:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  artemis:
+    image: apache/activemq-artemis:latest
+    container_name: artemis-broker
+    environment:
+      - ARTEMIS_USERNAME=admin
+      - ARTEMIS_PASSWORD=admin
+      - ANONYMOUS_LOGIN=true
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+    volumes:
+      - artemisdata:/var/lib/artemis-instance
+
+volumes:
+  dbdata:
+  artemisdata:
