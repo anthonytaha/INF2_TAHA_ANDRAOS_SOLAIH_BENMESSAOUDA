@@ -116,14 +116,15 @@ public class RecipientResource {
     @Secured
     @RolesAllowed({"advisor"})
     public Response validateRecipient(@PathParam("id") UUID recipientId,
-                                      RecipientValidationRequest request) {
+                                      @Context SecurityContext securityContext) {
         try {
-            if (request.getAdvisorId() == null || request.getAdvisorId().toString().isEmpty()) {
+            String advisorId = securityContext.getUserPrincipal().getName();
+            if (advisorId == null || advisorId.isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("advisorId est requis").build();
             }
 
-            recipientService.validateRecipient(recipientId, request.getAdvisorId());
+            recipientService.validateRecipient(recipientId, UUID.fromString(advisorId));
             return Response.ok().build();
 
         } catch (RuntimeException e) {

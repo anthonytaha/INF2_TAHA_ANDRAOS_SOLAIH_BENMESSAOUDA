@@ -25,49 +25,93 @@ public class GatewayResource {
     }
 
     @POST
-    @Path("/auth/{path: .*}")
+    @Path("/auth{path: .*}")
     public Response proxyAuth(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(AUTH_SERVICE + "/auth/" + path, "POST", body, headers);
+        return forwardRequest(AUTH_SERVICE + "/auth" + path, "POST", body, headers);
     }
 
     @GET
-    @Path("/auth/{path: .*}")
+    @Path("/auth{path: .*}")
     public Response proxyAuthGet(@PathParam("path") String path, @Context HttpHeaders headers) {
-        return forwardRequest(AUTH_SERVICE + "/auth/" + path, "GET", null, headers);
+        return forwardRequest(AUTH_SERVICE + "/auth" + path, "GET", null, headers);
     }
 
     @POST
-    @Path("/transfers/{path: .*}")
-    public Response proxyTransfer(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(TRANSFER_SERVICE + "/transfers/" + path, "POST", body, headers);
+    @Path("/advisor{path: .*}")
+    public Response proxyAdvisor(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/advisor" + path, "POST", body, headers);
     }
 
+    @GET
+    @Path("/advisor{path: .*}")
+    public Response proxyAdvisorGet(@PathParam("path") String path, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/advisor" + path, "GET", null, headers);
+    }
+
+    @POST
+    @Path("/client{path: .*}")
+    public Response proxyClient(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/client" + path, "POST", body, headers);
+    }
+
+    @GET
+    @Path("/client{path: .*}")
+    public Response proxyClientGet(@PathParam("path") String path, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/client" + path, "GET", null, headers);
+    }
+
+    @GET
+    @Path("/transfers{path: .*}")
+    public Response proxyTransferGet(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(TRANSFER_SERVICE + "/transfers" + path, "GET", null, headers);
+    }
+    @POST
+    @Path("/transfers{path: .*}")
+    public Response proxyTransfer(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(TRANSFER_SERVICE + "/transfers" + path, "POST", body, headers);
+    }
+
+    @GET
+    @Path("/recipients{path: .*}")
+    public Response proxyRecipientGet(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(TRANSFER_SERVICE + "/recipients" + path, "GET", null, headers);
+    }
+    @POST
+    @Path("/recipients{path: .*}")
+    public Response proxyRecipient(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(TRANSFER_SERVICE + "/recipients" + path, "POST", body, headers);
+    }
+    @PUT
+    @Path("/recipients{path: .*}")
+    public Response proxyRecipientPut(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(TRANSFER_SERVICE + "/recipients" + path, "PUT", body, headers);
+    }
     // ==========================================
     // ACCOUNT SERVICE ROUTING (Supports CRUD)
     // ==========================================
 
     @GET
-    @Path("/accounts/{path: .*}")
+    @Path("/accounts{path: .*}")
     public Response getAccount(@PathParam("path") String path, @Context HttpHeaders headers) {
-        return forwardRequest(ACCOUNT_SERVICE + "/accounts/" + path, "GET", null, headers);
+        return forwardRequest(ACCOUNT_SERVICE + "/accounts" + path, "GET", null, headers);
     }
 
     @POST
-    @Path("/accounts/{path: .*}")
+    @Path("/accounts{path: .*}")
     public Response createAccount(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(ACCOUNT_SERVICE + "/accounts/" + path, "POST", body, headers);
+        return forwardRequest(ACCOUNT_SERVICE + "/accounts" + path, "POST", body, headers);
     }
 
     @PUT
-    @Path("/accounts/{path: .*}")
+    @Path("/accounts{path: .*}")
     public Response updateAccount(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(ACCOUNT_SERVICE + "/accounts/" + path, "PUT", body, headers);
+        return forwardRequest(ACCOUNT_SERVICE + "/accounts" + path, "PUT", body, headers);
     }
 
     @DELETE
-    @Path("/accounts/{path: .*}")
+    @Path("/accounts{path: .*}")
     public Response deleteAccount(@PathParam("path") String path, @Context HttpHeaders headers) {
-        return forwardRequest(ACCOUNT_SERVICE + "/accounts/" + path, "DELETE", null, headers);
+        return forwardRequest(ACCOUNT_SERVICE + "/accounts" + path, "DELETE", null, headers);
     }
 
     // ==========================================
