@@ -24,21 +24,16 @@ public class JmsListenerManager implements ContainerLifecycleListener {
         try {
             System.out.println("Starting JMS Listener...");
 
-            // 1. Create Connection
             connection = connectionFactory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            // 2. Create Consumer
             MessageConsumer consumer = session.createConsumer(transferQueue);
 
-            // 3. Link the Listener (Injecting the Service manually or via DI)
-            // Since we injected AccountService above, we can pass it to the listener
             TransferMessageListener listener = new TransferMessageListener(accountService);
             consumer.setMessageListener(listener);
 
-            // 4. Start Connection
             connection.start();
-            System.out.println("✅ JMS Listener is active and listening.");
+            System.out.println("JMS Listener is active and listening.");
 
         } catch (JMSException e) {
             e.printStackTrace();

@@ -12,7 +12,8 @@ public class AccountMapper {
         return new Account(
                 accountCreateRequest.getClientId(),
                 accountCreateRequest.getType(),
-                accountCreateRequest.getCurrency()
+                accountCreateRequest.getCurrency(),
+                accountCreateRequest.getBalance()
         );
     }
 }

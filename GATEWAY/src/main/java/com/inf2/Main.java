@@ -32,16 +32,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        // Start the server with the corrected configuration
         final HttpServer server = startServer();
 
         System.out.println("Api server is starting on " + BASE_URI);
         System.out.println("Press Ctrl+C to stop the server.");
 
-        // Keep the main thread running until the application is shut down
         Thread.currentThread().join();
-
-        // Clean up on exit
         server.shutdownNow();
     }
 }

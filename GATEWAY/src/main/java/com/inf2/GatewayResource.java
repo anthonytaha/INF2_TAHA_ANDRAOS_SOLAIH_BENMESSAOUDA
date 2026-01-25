@@ -86,9 +86,6 @@ public class GatewayResource {
     public Response proxyRecipientPut(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
         return forwardRequest(TRANSFER_SERVICE + "/recipients" + path, "PUT", body, headers);
     }
-    // ==========================================
-    // ACCOUNT SERVICE ROUTING (Supports CRUD)
-    // ==========================================
 
     @GET
     @Path("/accounts{path: .*}")
@@ -114,23 +111,16 @@ public class GatewayResource {
         return forwardRequest(ACCOUNT_SERVICE + "/accounts" + path, "DELETE", null, headers);
     }
 
-    // ==========================================
-    // GENERIC FORWARDER (The "Dumb Pipe")
-    // ==========================================
-
     private Response forwardRequest(String targetUrl, String method, InputStream body, HttpHeaders headers) {
         var requestBuilder = client.target(targetUrl).request();
 
-        // 1. Forward Authorization Header (Pass the JWT)
         String authHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
         if (authHeader != null) {
             requestBuilder.header(HttpHeaders.AUTHORIZATION, authHeader);
         }
 
-        // 2. Execute based on Method
         Response backendResponse;
 
-        // We use InputStream 'body' directly to stream data without parsing it (Performance + Simplicity)
         Entity<InputStream> entity = (body != null) ? Entity.entity(body, MediaType.APPLICATION_JSON) : null;
 
         switch (method) {
@@ -149,7 +139,6 @@ public class GatewayResource {
                 break;
         }
 
-        // 3. Return the exact response from the microservice
         return Response.status(backendResponse.getStatus())
                 .entity(backendResponse.readEntity(InputStream.class)) // Stream output back
                 .type(backendResponse.getMediaType())

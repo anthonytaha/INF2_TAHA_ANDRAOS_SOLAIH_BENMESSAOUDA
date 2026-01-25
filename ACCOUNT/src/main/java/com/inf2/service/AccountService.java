@@ -127,17 +127,13 @@ public class AccountService {
     public void transferMoney(UUID fromAccountId, UUID toAccountId, java.math.BigDecimal amount) {
         EntityManager em = null;
         try {
-            // 1. Start a new Transaction
             em = emf.createEntityManager();
             EntityTransaction tx = em.getTransaction();
             tx.begin();
 
-            // 2. Load both accounts using the SAME EntityManager
-            // This ensures they are part of the same transaction context.
             Account sourceAccount = accountDAO.findById(em, fromAccountId);
             Account destAccount = accountDAO.findById(em, toAccountId);
 
-            // 3. Validation
             if (sourceAccount == null) {
                 throw new IllegalArgumentException("Source account not found: " + fromAccountId);
             }
@@ -148,32 +144,24 @@ public class AccountService {
                 throw new IllegalArgumentException("Cannot transfer money to the same account.");
             }
 
-            // 4. Business Logic (Check balance and update in-memory state)
-            // Note: verify your Account entity has a 'getBalance()' method
             if (sourceAccount.getBalance().compareTo(amount) < 0) {
                 throw new IllegalStateException("Insufficient funds in source account");
             }
 
-            // Use your existing helper methods
             sourceAccount.debit(amount);
             destAccount.credit(amount);
 
-            // 5. Persist Changes
             accountDAO.update(em, sourceAccount);
             accountDAO.update(em, destAccount);
 
-            // 6. Commit the Transaction (Atomic save)
             tx.commit();
 
         } catch (Exception e) {
-            // 7. Rollback on ANY failure
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            // Re-throw to alert the caller (e.g., the JMS Listener)
             throw new RuntimeException("Transfer failed: " + e.getMessage(), e);
         } finally {
-            // 8. Cleanup
             if (em != null && em.isOpen()) {
                 em.close();
             }

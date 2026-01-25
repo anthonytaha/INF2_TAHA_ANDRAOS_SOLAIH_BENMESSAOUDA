@@ -55,17 +55,13 @@ public class TransferService {
                 throw new RuntimeException("Destinataire n'appartient pas à ce client");
             }
 
-            // On suppose que destinationAccountId vient de l'IBAN du recipient
-            // Dans un vrai système, il faudrait résoudre l'IBAN vers un accountId
-            UUID destinationAccountId = recipient.getRecipientAccountId(); // Simplifié
+            UUID destinationAccountId = recipient.getRecipientAccountId();
 
-            // Créer le transfer
             Transfer transfer = transferMapper.toEntity(request, destinationAccountId, recipient.getId());
             transferDAO.save(em, transfer);
 
             tx.commit();
 
-            // Envoyer le message JMS (hors transaction)
             try {
                 messageProducer.sendTransferCommand(
                         transfer.getCorrelationId(),
@@ -74,7 +70,6 @@ public class TransferService {
                         transfer.getAmount()
                 );
             } catch (Exception e) {
-                // Si l'envoi JMS échoue, marquer le transfer comme failed
                 updateTransferStatus(transfer.getId(), TransferStatus.FAILED,
                         "Échec envoi commande: " + e.getMessage());
             }

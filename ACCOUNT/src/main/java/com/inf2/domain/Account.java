@@ -36,11 +36,11 @@ public class Account implements Serializable {
     }
 
     // constructeur
-    public Account(UUID clientId, AccountType type, String currency) {
+    public Account(UUID clientId, AccountType type, String currency, BigDecimal balance) {
         this.clientId = clientId;
         this.type = type;
         this.currency = currency;
-        this.balance = BigDecimal.ZERO;
+        this.balance = balance;
         this.status = AccountStatus.active;
     }
 
