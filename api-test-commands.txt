@@ -10,7 +10,7 @@ curl -X POST http://localhost:8085/api/advisor \
     "password": "AdminPassword123!",
     "firstName": "Sarah",
     "lastName": "Connor",
-    "dateofBirth": "1980-01-01",
+    "dateOfBirth": "1980-01-01",
     "departmentCode": "HQ_01"
   }'
 
@@ -48,7 +48,7 @@ curl -X POST http://localhost:8085/api/accounts \
   -H "Authorization: Bearer $ADVISOR_TOKEN" \
   -d '{
     "clientId": "$CLIENT_A_ID",
-    "type": "CHECKING",
+    "type": "checking",
     "currency": "USD",
     "balance": 1000.00
   }'
