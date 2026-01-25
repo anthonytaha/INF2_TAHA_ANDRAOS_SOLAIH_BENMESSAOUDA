@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>jakartaee-starter</artifactId>
+    <artifactId>AUTH</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -69,8 +69,8 @@
 
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>artemis-jms-client</artifactId>
-            <version>2.32.0</version>
+            <artifactId>artemis-jakarta-client</artifactId>
+            <version>2.44.0</version>
         </dependency>
         <dependency>
             <groupId>jakarta.jms</groupId>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-core-client</artifactId>
-            <version>2.32.0</version>
+            <version>2.44.0</version>
         </dependency>
 
         <dependency>

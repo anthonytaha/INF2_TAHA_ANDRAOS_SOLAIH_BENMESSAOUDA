@@ -6,10 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="jakartaee-starter (2)" />
+        <module name="GATEWAY" />
         <module name="ACCOUNT" />
-        <module name="jakartaee-starter" />
-        <module name="jakartaee-starter (1)" />
+        <module name="TRANSFER" />
+        <module name="AUTH" />
       </profile>
     </annotationProcessing>
   </component>

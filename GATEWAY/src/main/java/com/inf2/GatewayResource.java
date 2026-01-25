@@ -24,12 +24,6 @@ public class GatewayResource {
         this.client = ClientBuilder.newClient();
     }
 
-    @POST
-    @Path("/auth{path: .*}")
-    public Response proxyAuth(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(AUTH_SERVICE + "/auth" + path, "POST", body, headers);
-    }
-
     @GET
     @Path("/auth{path: .*}")
     public Response proxyAuthGet(@PathParam("path") String path, @Context HttpHeaders headers) {
@@ -37,9 +31,9 @@ public class GatewayResource {
     }
 
     @POST
-    @Path("/advisor{path: .*}")
-    public Response proxyAdvisor(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(AUTH_SERVICE + "/advisor" + path, "POST", body, headers);
+    @Path("/auth{path: .*}")
+    public Response proxyAuth(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/auth" + path, "POST", body, headers);
     }
 
     @GET
@@ -49,15 +43,21 @@ public class GatewayResource {
     }
 
     @POST
-    @Path("/client{path: .*}")
-    public Response proxyClient(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
-        return forwardRequest(AUTH_SERVICE + "/client" + path, "POST", body, headers);
+    @Path("/advisor{path: .*}")
+    public Response proxyAdvisor(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/advisor" + path, "POST", body, headers);
     }
 
     @GET
     @Path("/client{path: .*}")
     public Response proxyClientGet(@PathParam("path") String path, @Context HttpHeaders headers) {
         return forwardRequest(AUTH_SERVICE + "/client" + path, "GET", null, headers);
+    }
+
+    @POST
+    @Path("/client{path: .*}")
+    public Response proxyClient(@PathParam("path") String path, InputStream body, @Context HttpHeaders headers) {
+        return forwardRequest(AUTH_SERVICE + "/client" + path, "POST", body, headers);
     }
 
     @GET

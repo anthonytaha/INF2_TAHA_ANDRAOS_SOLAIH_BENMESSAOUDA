@@ -2,21 +2,23 @@ package com.inf2;
 
 import com.inf2.dao.*;
 import com.inf2.dao.impl.*;
-import com.inf2.service.*;
+import com.inf2.messaging.JmsLifecycleManager;
+import com.inf2.messaging.UserCreatedProducer;
 import com.inf2.filter.AuthenticationFilter;
 
 import com.inf2.service.auth.AuthService;
 import com.inf2.service.auth.TokenService;
 import com.inf2.service.domain.AdvisorService;
 import com.inf2.service.domain.ClientService;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Queue;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-// --- CRITICAL IMPORT CHANGES ---
-// 1. Use the HK2 AbstractBinder (Supports bindFactory properly)
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-// 2. Use the HK2 Factory interface
 import org.glassfish.hk2.api.Factory;
 
 import jakarta.persistence.EntityManager;
@@ -25,7 +27,7 @@ import jakarta.persistence.Persistence;
 import jakarta.inject.Singleton;
 import jakarta.inject.Inject; // Needed for the Provider
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-
+import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 
 import java.net.URI;
 
@@ -42,18 +44,27 @@ public class Main {
                 .register(new AbstractBinder() {
                     @Override
                     protected void configure() {
+                        try {
+                            ConnectionFactory cf = new ActiveMQConnectionFactory("tcp://localhost:61616");
+                            bind(cf).to(ConnectionFactory.class);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
+                        Queue userQueue = new ActiveMQQueue("UserCreatedQueue");
+                        bind(userQueue).to(Queue.class);
                         bind(emf).to(EntityManagerFactory.class);
                         bindFactory(EntityManagerFactoryProvider.class)
                                 .to(EntityManager.class)
                                 .in(org.glassfish.jersey.process.internal.RequestScoped.class);
 
-                        bind(HelloDAOImpl.class).to(HelloDAO.class).in(Singleton.class);
+                        bind(UserCreatedProducer.class).to(UserCreatedProducer.class).in(Singleton.class);
+                        bind(JmsLifecycleManager.class).to(ContainerLifecycleListener.class).in(Singleton.class);
+
                         bind(ClientDAOImpl.class).to(ClientDAO.class).in(Singleton.class);
                         bind(AdvisorDAOImpl.class).to(AdvisorDAO.class).in(Singleton.class);
 
                         bind(TokenService.class).to(TokenService.class).in(Singleton.class);
-                        bind(HelloService.class).to(HelloService.class).in(Singleton.class);
                         bind(ClientService.class).to(ClientService.class).in(Singleton.class);
                         bind(AdvisorService.class).to(AdvisorService.class).in(Singleton.class);
                         bind(AuthService.class).to(AuthService.class).in(Singleton.class);
@@ -69,13 +80,11 @@ public class Main {
         Thread.currentThread().join();
     }
 
-    // --- HELPER CLASS ---
-    // Ensure this class is 'static' so Main can access it
     public static class EntityManagerFactoryProvider implements Factory<EntityManager> {
 
         private final EntityManagerFactory emf;
 
-        @Inject // <--- Injection works here now
+        @Inject
         public EntityManagerFactoryProvider(EntityManagerFactory emf) {
             this.emf = emf;
         }

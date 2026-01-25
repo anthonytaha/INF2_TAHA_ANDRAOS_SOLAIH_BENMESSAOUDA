@@ -3,7 +3,9 @@ package com.inf2.resource;
 import com.inf2.domain.Client;
 import com.inf2.dto.Client.ClientCreateRequest;
 import com.inf2.dto.auth.UserUpdateRequest;
+import com.inf2.filter.Secured;
 import com.inf2.service.domain.ClientService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -21,6 +23,8 @@ public class ClientResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RolesAllowed({"advisor"})
     public Response getClients() {
         try {
             List<Client> fetchedClient = clientService.getClients();
@@ -29,12 +33,16 @@ public class ClientResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RolesAllowed({"advisor"})
     public Response createClient(ClientCreateRequest client) {
         try {
-            clientService.createClient(client);
-            return Response.status(Response.Status.CREATED).build();
+            Client clientResponse = clientService.createClient(client);
+            return Response.status(Response.Status.CREATED).entity(clientResponse).build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
@@ -43,6 +51,8 @@ public class ClientResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RolesAllowed({"advisor"})
     public Response getClient(@PathParam("id") UUID id) {
         try {
             Client fetchedClient = clientService.getClientById(id);
@@ -55,6 +65,8 @@ public class ClientResource {
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RolesAllowed({"advisor"})
     public Response deleteClient(@PathParam("id") UUID id) {
         try {
             clientService.deleteClient(id);
@@ -68,6 +80,8 @@ public class ClientResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RolesAllowed({"advisor"})
     public Response updateClient(@PathParam("id") UUID id, UserUpdateRequest userUpdateRequest) {
         try {
             clientService.updateClient(id, userUpdateRequest);

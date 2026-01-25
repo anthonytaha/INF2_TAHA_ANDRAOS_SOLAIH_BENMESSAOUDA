@@ -2,8 +2,8 @@ package com.inf2.resource;
 
 
 import com.inf2.domain.TransferRecipient;
-import com.inf2.dto.transfer.RecipientCreateRequest;
-import com.inf2.dto.transfer.RecipientValidationRequest;
+import com.inf2.dto.RecipientCreateRequest;
+import com.inf2.dto.RecipientValidationRequest;
 import com.inf2.filter.Secured;
 import com.inf2.service.RecipientService;
 import jakarta.annotation.security.RolesAllowed;
@@ -69,7 +69,7 @@ public class RecipientResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    @RolesAllowed({"advisor"})
+    @RolesAllowed({"client"})
     public Response getRecipients(@Context SecurityContext securityContext,
                                   @QueryParam("validated") Boolean validated) {
         try {

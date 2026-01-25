@@ -11,6 +11,6 @@ public interface ClientDAO {
     Client find(UUID id);
     Client findByEmail(String email) ;
     Client save(Client user);
-    void update(UUID id, UserUpdateRequest userUpdateRequest);
+    void update(UUID id, String email);
     void delete(UUID id);
 }

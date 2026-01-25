@@ -2,12 +2,14 @@ package com.inf2.dto;
 
 import com.inf2.domain.AccountType;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class AccountCreateRequest {
     private UUID clientId;
     private AccountType type;
     private String currency;
+    private BigDecimal balance;
 
     public AccountCreateRequest() {}
 
@@ -31,5 +33,13 @@ public class AccountCreateRequest {
     }
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }

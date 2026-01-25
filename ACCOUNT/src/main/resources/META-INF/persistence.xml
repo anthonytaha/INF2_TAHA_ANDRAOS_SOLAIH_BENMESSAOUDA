@@ -2,7 +2,6 @@
              version="3.0">
     <persistence-unit name="starterPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.inf2.domain.HelloMessage</class>
         <class>com.inf2.domain.Account</class>
         <properties>
             <!-- JDBC Connection Properties -->

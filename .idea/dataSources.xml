@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@authdb" uuid="ca9ee9d7-985f-47fd-887c-3cf539efa7ee">
+    <data-source source="LOCAL" name="authdb@localhost" uuid="e1506428-fcce-41f2-b75f-928d20899050">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
@@ -13,11 +13,11 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="accountdb@localhost" uuid="97c8ca58-01f7-4a7f-8fa5-9620eea51bc9">
+    <data-source source="LOCAL" name="transferdb@localhost" uuid="2520b1b7-478d-4184-8a93-4d98309fcd0a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/accountdb</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/transferdb</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
@@ -25,11 +25,11 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="transferdb@localhost" uuid="aab2c6eb-cf4a-434b-9b68-093f20840e27">
+    <data-source source="LOCAL" name="accountdb@localhost" uuid="63644fb2-a1ed-453a-84be-feed0fd91dc2">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/transferdb</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/accountdb</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

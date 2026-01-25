@@ -2,11 +2,9 @@ package com.inf2.service;
 
 
 import com.inf2.dao.RecipientDAO;
-import com.inf2.dao.impl.RecipientDAOImpl;
 import com.inf2.domain.RecipientStatus;
 import com.inf2.domain.TransferRecipient;
-import com.inf2.dto.transfer.RecipientCreateRequest;
-import com.inf2.dto.transfer.RecipientCreateRequest;
+import com.inf2.dto.RecipientCreateRequest;
 import com.inf2.mapper.RecipientMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

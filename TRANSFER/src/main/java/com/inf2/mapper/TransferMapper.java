@@ -1,7 +1,7 @@
 package com.inf2.mapper;
 
 import com.inf2.domain.Transfer;
-import com.inf2.dto.transfer.TransferCreateRequest;
+import com.inf2.dto.TransferCreateRequest;
 import jakarta.inject.Singleton;
 
 import java.util.UUID;

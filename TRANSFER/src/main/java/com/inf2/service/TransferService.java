@@ -2,12 +2,10 @@ package com.inf2.service;
 
 import com.inf2.dao.RecipientDAO;
 import com.inf2.dao.TransferDAO;
-import com.inf2.dao.impl.RecipientDAOImpl;
-import com.inf2.dao.impl.TransferDAOImpl;
 import com.inf2.domain.Transfer;
 import com.inf2.domain.TransferRecipient;
 import com.inf2.domain.TransferStatus;
-import com.inf2.dto.transfer.TransferCreateRequest;
+import com.inf2.dto.TransferCreateRequest;
 import com.inf2.mapper.TransferMapper;
 import com.inf2.messaging.TransferMessageProducer;
 import jakarta.inject.Inject;
@@ -15,7 +13,7 @@ import jakarta.inject.Singleton;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.UUID;
 

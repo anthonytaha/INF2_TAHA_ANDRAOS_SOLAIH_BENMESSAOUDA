@@ -5,6 +5,7 @@ import com.inf2.dao.impl.AdvisorDAOImpl;
 import com.inf2.domain.Advisor;
 import com.inf2.dto.advisor.AdvisorCreateRequest;
 import com.inf2.dto.auth.UserUpdateRequest;
+import com.inf2.mapper.AdvisorMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,14 +29,7 @@ public class AdvisorService {
 
     public Advisor createAdvisor(AdvisorCreateRequest advisorCreateRequest) {
 
-        Advisor user = new Advisor(
-                advisorCreateRequest.getFirstName(),
-                advisorCreateRequest.getLastName(),
-                advisorCreateRequest.getEmail(),
-                advisorCreateRequest.getPassword(),
-                advisorCreateRequest.getDateOfBirth(),
-                advisorCreateRequest.getDepartmentCode()
-        );
+        Advisor user = AdvisorMapper.toAdvisor(advisorCreateRequest);
 
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);

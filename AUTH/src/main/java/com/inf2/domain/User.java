@@ -22,6 +22,7 @@ public class User { //step 1 : define what user entity looks like
 
     @NotNull (message = "Email is required")
     @Email (message = "Please provide a valid email address")
+    @Column(unique = true)
     private String email;
 
     @NotNull (message = "Password is required")

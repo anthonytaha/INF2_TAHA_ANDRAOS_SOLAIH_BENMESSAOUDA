@@ -1,0 +1,124 @@
+# ==========================================
+# Phase 1: Administrator and Advisor Setup
+# ==========================================
+
+# 1. Register a new Advisor
+curl -X POST http://localhost:8085/api/advisor \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@bank.com",
+    "password": "AdminPassword123!",
+    "firstName": "Sarah",
+    "lastName": "Connor",
+    "dateofBirth": "1980-01-01",
+    "departmentCode": "HQ_01"
+  }'
+
+# 2. Login as Advisor
+# Response returns access_token (Save as $ADVISOR_TOKEN) 
+# and user id (Save as $ADVISOR_ID)
+curl -X POST http://localhost:8085/api/auth/advisor/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@bank.com",
+    "password": "AdminPassword123!"
+  }'
+
+
+# ==========================================
+# Phase 2: Client A (Sender) Onboarding
+# ==========================================
+
+# 1. Register Client A (Save ID as $CLIENT_A_ID)
+curl -X POST http://localhost:8085/api/client \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADVISOR_TOKEN" \
+  -d '{
+    "email": "sender@gmail.com",
+    "password": "SenderPassword123!",
+    "firstName": "Alice",
+    "lastName": "Sender",
+    "phoneNumber": "+1234567890",
+    "dateOfBirth": "1990-05-15"
+  }'
+
+# 2. Create Source Account (Save ID as $SOURCE_ACCOUNT_ID)
+curl -X POST http://localhost:8085/api/accounts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADVISOR_TOKEN" \
+  -d '{
+    "clientId": "$CLIENT_A_ID",
+    "type": "CHECKING",
+    "currency": "USD",
+    "balance": 1000.00
+  }'
+
+
+# ==========================================
+# Phase 3: Client B (Receiver) Onboarding
+# ==========================================
+
+# 1. Register Client B (Save ID as $CLIENT_B_ID)
+curl -X POST http://localhost:8085/api/client \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADVISOR_TOKEN" \
+  -d '{
+    "email": "receiver@gmail.com",
+    "password": "ReceiverPassword123!",
+    "firstName": "Bob",
+    "lastName": "Receiver",
+    "phoneNumber": "+1987654321",
+    "dateOfBirth": "1992-08-20"
+  }'
+
+# 2. Create Destination Account (Save ID as $DEST_ACCOUNT_ID)
+curl -X POST http://localhost:8085/api/accounts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADVISOR_TOKEN" \
+  -d '{
+    "clientId": "$CLIENT_B_ID",
+    "type": "savings",
+    "currency": "USD",
+    "balance": 0.00
+  }'
+
+
+# ==========================================
+# Phase 4: Recipient Linking and Validation
+# ==========================================
+
+# 1. Login as Client A (Save token as $CLIENT_A_TOKEN)
+curl -X POST http://localhost:8085/api/auth/client/login \
+  -d '{"email": "sender@gmail.com", "password": "SenderPassword123!"}'
+
+# 2. Add Recipient (Save ID as $RECIPIENT_RECORD_ID)
+# Note: We use the destination account ID as the IBAN
+curl -X POST http://localhost:8085/api/recipients \
+  -H "Authorization: Bearer $CLIENT_A_TOKEN" \
+  -d '{
+    "recipientName": "Bob Receiver", 
+    "recipientAccountId": "$DEST_ACCOUNT_ID"
+  }'
+
+# 3. Advisor Validates Recipient
+curl -X PUT http://localhost:8085/api/recipients/$RECIPIENT_RECORD_ID/validate \
+  -H "Authorization: Bearer $ADVISOR_TOKEN"
+
+
+# ==========================================
+# Phase 5: Transfer Execution
+# ==========================================
+
+# 1. Initiate Transfer
+curl -X POST http://localhost:8085/api/transfers \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $CLIENT_A_TOKEN" \
+  -d '{
+    "sourceAccountId": "$SOURCE_ACCOUNT_ID",
+    "recipientId": "$RECIPIENT_RECORD_ID",
+    "amount": 200.00
+  }'
+
+# 2. Verify funds received by Client B (As Advisor)
+curl -X GET http://localhost:8085/api/accounts/$DEST_ACCOUNT_ID \
+  -H "Authorization: Bearer $ADVISOR_TOKEN"

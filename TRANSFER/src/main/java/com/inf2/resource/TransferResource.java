@@ -2,8 +2,7 @@ package com.inf2.resource;
 
 
 import com.inf2.domain.Transfer;
-import com.inf2.dto.transfer.TransferCreateRequest;
-import com.inf2.dto.transfer.TransferCreateRequest;
+import com.inf2.dto.TransferCreateRequest;
 import com.inf2.filter.Secured;
 import com.inf2.service.TransferService;
 import jakarta.annotation.security.RolesAllowed;
@@ -85,10 +84,11 @@ public class TransferResource {
     }
 
     @GET
+    @Path("/account/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @RolesAllowed({"advisor"})
-    public Response getTransfers(@QueryParam("accountId") UUID accountId,
+    public Response getTransfers(@PathParam("id") UUID accountId,
                                  @QueryParam("type") String type) {
         try {
             if (accountId == null || accountId.toString().isEmpty()) {

@@ -1,4 +1,4 @@
-package com.inf2.dto.transfer;
+package com.inf2.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -2,12 +2,10 @@ package com.inf2;
 
 import com.inf2.dao.AccountDAO;
 import com.inf2.dao.impl.AccountDAOImpl;
-import com.inf2.dao.impl.HelloDAOImpl;
 import com.inf2.filter.AuthenticationFilter;
 import com.inf2.mapper.AccountMapper;
 import com.inf2.messaging.JmsListenerManager;
 import com.inf2.service.AccountService;
-import com.inf2.service.HelloService;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Queue;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
@@ -57,9 +55,7 @@ public class Main {
                         bind(transferQueue).to(jakarta.jms.Queue.class);
 
                         bind(emf).to(EntityManagerFactory.class).in(jakarta.inject.Singleton.class);
-                        bind(HelloDAOImpl.class).to(HelloDAOImpl.class).in(jakarta.inject.Singleton.class);
                         bind(AccountDAOImpl.class).to(AccountDAO.class).in(jakarta.inject.Singleton.class);
-                        bind(HelloService.class).to(HelloService.class).in(jakarta.inject.Singleton.class);
                         bind(AccountService.class).to(AccountService.class).in(jakarta.inject.Singleton.class);
                         bind(AccountMapper.class).to(AccountMapper.class).in(jakarta.inject.Singleton.class);
 

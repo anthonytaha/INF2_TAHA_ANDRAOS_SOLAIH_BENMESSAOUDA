@@ -2,7 +2,7 @@ package com.inf2.mapper;
 
 
 import com.inf2.domain.TransferRecipient;
-import com.inf2.dto.transfer.RecipientCreateRequest;
+import com.inf2.dto.RecipientCreateRequest;
 import jakarta.inject.Singleton;
 
 import java.util.UUID;

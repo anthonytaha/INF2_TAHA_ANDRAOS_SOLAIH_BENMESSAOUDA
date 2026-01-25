@@ -27,7 +27,6 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import java.net.URI;
 
 public class Main {
-    // The base URI where the JAX-RS application is deployed
     public static final String BASE_URI = "http://localhost:8084/api/";
 
     /**
@@ -66,22 +65,17 @@ public class Main {
                         bind(TransferMessageProducer.class).to(TransferMessageProducer.class).in(jakarta.inject.Singleton.class);
                     }
                 });
-//resources are auto-binded so no need to bind them here
-
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
     public static void main(String[] args) throws Exception {
-        // Start the server with the corrected configuration
         final HttpServer server = startServer();
 
         System.out.println("Api server is starting on " + BASE_URI);
         System.out.println("Press Ctrl+C to stop the server.");
 
-        // Keep the main thread running until the application is shut down
         Thread.currentThread().join();
 
-        // Clean up on exit
         server.shutdownNow();
     }
 }

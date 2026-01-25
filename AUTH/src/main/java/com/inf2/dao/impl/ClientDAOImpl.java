@@ -50,6 +50,7 @@ public class ClientDAOImpl implements ClientDAO { //step 2 : does the database o
             transaction.begin();
             em.persist(user);
             transaction.commit();
+            user = findByEmail(user.getEmail());
             return user;
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
@@ -59,14 +60,14 @@ public class ClientDAOImpl implements ClientDAO { //step 2 : does the database o
         }
     }
 
-    public void  update(UUID id, UserUpdateRequest userUpdateRequest) {
+    public void  update(UUID id, String email) {
 
         EntityManager em = emProvider.get(); //to access it not only in the try
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             Client Client = em.find(Client.class, id);
-            Client.setEmail(userUpdateRequest.getEmail());
+            Client.setEmail(email);
             em.persist(Client);
             transaction.commit();
         } catch (Exception e) {

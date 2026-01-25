@@ -5,6 +5,8 @@ import com.inf2.dao.impl.ClientDAOImpl;
 import com.inf2.domain.Client;
 import com.inf2.dto.Client.ClientCreateRequest;
 import com.inf2.dto.auth.UserUpdateRequest;
+import com.inf2.mapper.ClientMapper;
+import com.inf2.messaging.UserCreatedProducer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.mindrot.jbcrypt.BCrypt;
@@ -18,6 +20,8 @@ public class ClientService {
 
     @Inject
     private ClientDAO userDAO;
+    @Inject
+    private UserCreatedProducer userCreatedProducer;
 
     public Client getClientById(UUID id) {
         return userDAO.find(id);
@@ -30,22 +34,19 @@ public class ClientService {
     }
     public Client createClient(ClientCreateRequest clientCreateRequest) {
 
-        Client user = new Client(
-                clientCreateRequest.getFirstName(),
-                clientCreateRequest.getLastName(),
-                clientCreateRequest.getEmail(),
-                clientCreateRequest.getPassword(),
-                clientCreateRequest.getDateOfBirth(),
-                clientCreateRequest.getPhoneNumber()
-        );
+        Client user = ClientMapper.toClient(clientCreateRequest);
 
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
-        return userDAO.save(user);
+        Client createdClient =  userDAO.save(user);
+        if(createdClient != null) {
+            userCreatedProducer.sendUserCreatedEvent(createdClient);
+        }
+        return createdClient;
     }
     public void updateClient(UUID id, UserUpdateRequest userUpdateRequest){
 
-        userDAO.update(id, userUpdateRequest);
+        userDAO.update(id, userUpdateRequest.getEmail());
     }
     public void deleteClient(UUID id) {
         userDAO.delete(id);
